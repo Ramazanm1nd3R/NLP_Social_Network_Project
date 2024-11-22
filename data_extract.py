@@ -2,7 +2,7 @@ import praw
 import csv
 import emoji
 from textblob import TextBlob
-from datetime import datetime
+from datetime import datetime, timezone
 from dotenv import load_dotenv
 import os
 
@@ -20,7 +20,7 @@ reddit = praw.Reddit(
 
 # Проверка наличия эмодзи в тексте
 def contains_emoji(text):
-    return any(char in emoji.UNICODE_EMOJI['en'] for char in text)
+    return any(emoji.is_emoji(char) for char in text)
 
 # Анализ тональности текста
 def get_sentiment(text):
@@ -45,7 +45,7 @@ for post in subreddit.new(limit=max_posts):  # Получаем новые по�
     # Извлечение данных
     score = post.score
     num_comments = post.num_comments
-    timestamp = datetime.utcfromtimestamp(post.created_utc).strftime('%Y-%m-%d %H:%M:%S')
+    timestamp = datetime.fromtimestamp(post.created_utc, tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
     emoji_flag = 1 if contains_emoji(full_text) else 0
     sentiment = get_sentiment(full_text)
     word_count = len(full_text.split())
