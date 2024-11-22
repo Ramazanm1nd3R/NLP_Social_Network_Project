@@ -25,3 +25,7 @@ reddit_posts.csv  # Исключаем файл с результатами па
 *.tar.gz
 *.tmp
 *.bak
+
+# === Игнорируемые файлы ===
+
+data_extract.py
