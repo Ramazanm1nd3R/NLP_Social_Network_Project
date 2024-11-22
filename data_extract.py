@@ -2,9 +2,11 @@ import praw
 import csv
 import emoji
 from textblob import TextBlob
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from dotenv import load_dotenv
 import os
+import time
+import calendar
 
 # === Загрузка переменных из .env ===
 load_dotenv()
@@ -27,38 +29,66 @@ def get_sentiment(text):
     analysis = TextBlob(text)
     return "Positive" if analysis.sentiment.polarity > 0 else "Negative" if analysis.sentiment.polarity < 0 else "Neutral"
 
-# === Сбор данных ===
+# === Определение временного диапазона ===
 
-# Выбираем сабреддит и лимит данных
-subreddit = reddit.subreddit("all")  # Можешь указать конкретный сабреддит, например, "technology"
-max_posts = 50000  # Цель: 50,000 строк
+# Сегодняшняя дата
+today = datetime.now()
+
+# Первый день текущего месяца
+first_day_this_month = datetime(today.year, today.month, 1)
+
+# Первый день прошлого месяца
+first_day_last_month = first_day_this_month - timedelta(days=1)
+first_day_last_month = datetime(first_day_last_month.year, first_day_last_month.month, 1)
+
+# Определение Unix timestamps
+start_timestamp = int(first_day_last_month.timestamp())  # Начало прошлого месяца
+end_timestamp = int(first_day_this_month.timestamp())    # Начало текущего месяца
+
+# === Сбор данных ===
+max_posts = 500  # Цель: 500 строк
 data = []
 
-# Сбор постов
+# Выбираем сабреддит
+subreddit = reddit.subreddit("all")  # Можешь указать конкретный сабреддит, например, "technology"
+
+# Начальный статус
 print("Сбор данных начат...")
-for post in subreddit.new(limit=max_posts):  # Получаем новые посты
-    # Извлечение текста
-    title = post.title
-    selftext = post.selftext
-    full_text = f"{title} {selftext}"  # Сочетание заголовка и текста поста
+current_timestamp = int(time.time())  # Текущее время
 
-    # Извлечение данных
-    score = post.score
-    num_comments = post.num_comments
-    timestamp = datetime.fromtimestamp(post.created_utc, tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
-    emoji_flag = 1 if contains_emoji(full_text) else 0
-    sentiment = get_sentiment(full_text)
-    word_count = len(full_text.split())
-    media_type = "Image" if post.url.endswith(('.jpg', '.png', '.gif')) else \
-                 "Video" if post.url.endswith(('.mp4', '.mov')) else \
-                 "Text"
+while len(data) < max_posts and current_timestamp > start_timestamp:
+    for post in subreddit.new(limit=100):  # Получаем новые посты порциями по 100
+        if post.created_utc < start_timestamp:  # Игнорируем посты, которые старше нужного диапазона
+            current_timestamp = post.created_utc  # Обновляем временной предел
+            break
 
-    # Добавление данных в список
-    data.append([full_text, score, num_comments, timestamp, emoji_flag, sentiment, word_count, media_type])
+        if post.created_utc >= end_timestamp:  # Пропускаем посты, которые уже из текущего месяца
+            continue
+
+        # Извлечение текста
+        title = post.title or ""
+        selftext = post.selftext or ""
+        full_text = f"{title} {selftext}".strip()  # Сочетание заголовка и текста поста
+
+        # Извлечение данных
+        score = post.score
+        num_comments = post.num_comments
+        timestamp = datetime.fromtimestamp(post.created_utc, tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
+        emoji_flag = 1 if contains_emoji(full_text) else 0
+        sentiment = get_sentiment(full_text)
+        word_count = len(full_text.split())
+        media_type = "Image" if post.url.endswith(('.jpg', '.png', '.gif')) else \
+                     "Video" if post.url.endswith(('.mp4', '.mov')) else \
+                     "Text"
+
+        # Добавление данных в список
+        data.append([full_text, score, num_comments, timestamp, emoji_flag, sentiment, word_count, media_type])
 
     # Промежуточный статус
-    if len(data) % 1000 == 0:
-        print(f"Собрано {len(data)} постов...")
+    print(f"Собрано {len(data)} постов...")
+
+    # Задержка для предотвращения превышения лимитов API
+    time.sleep(1)
 
 # === Сохранение данных ===
 output_file = "reddit_posts.csv"
