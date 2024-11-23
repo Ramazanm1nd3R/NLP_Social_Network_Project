@@ -1,6 +1,8 @@
 
 # 📊 Reddit Post Popularity Dataset (2020–2024)
 
+Link to kaggle - https://www.kaggle.com/datasets/ramazanospan/analysis-of-popular-reddit-posts-20202024
+
 ## 🚀 Overview
 This project provides a dataset of Reddit posts collected from **2020 to 2024**. It includes posts from popular subreddits like `news`, `worldnews`, and `technology`, focusing on analyzing and predicting post popularity.
 
