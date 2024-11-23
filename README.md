@@ -56,9 +56,9 @@ This project can be used for:
 NLP_Social_Network_Project/
 │
 ├── datasets/
-│   ├── reddit_posts_all_time.csv       # Dataset with all posts
-│   ├── reddit_posts_popular.csv        # Dataset with popular posts
-│   └── reddit_posts_other.csv          # Additional datasets
+│   ├── reddit_posts_all_time.csv                
+│   ├── reddit_posts_popularity_mixed.csv        
+│   └── reddit_posts_all_time_with_crossposts.csv
 │
 ├── new_func/
 │   ├── add_retweets.py                 # Script to process retweet data
