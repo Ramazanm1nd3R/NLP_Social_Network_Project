@@ -1,20 +1,27 @@
 
-# 📊 Reddit Post Popularity Dataset (2020–2024)
+# 📊 Reddit Data Collection and Analysis Project
 
 Link to kaggle - https://www.kaggle.com/datasets/ramazanospan/analysis-of-popular-reddit-posts-20202024
 
-## 🚀 Overview
-This project provides a dataset of Reddit posts collected from **2020 to 2024**. It includes posts from popular subreddits like `news`, `worldnews`, and `technology`, focusing on analyzing and predicting post popularity.
-
-The dataset is designed for tasks like:
-- **Predicting post popularity** (e.g., `Score`, `Comments`).
-- **Analyzing sentiment** and its relationship with popularity.
-- **Exploring trends** in user engagement based on time and content type.
+This project provides tools, scripts, and datasets to analyze Reddit posts from various time periods and subreddits. It is designed for tasks such as predicting post popularity, analyzing sentiment, and exploring engagement patterns across Reddit.
 
 ---
 
-## 📝 Dataset Features
-The dataset contains **5248 rows** and the following columns:
+## 🚀 Overview
+This project offers:
+- **Scripts** to collect data from Reddit using the Reddit API (PRAW).
+- **Multiple datasets** containing both popular and non-popular posts, enabling diverse analysis.
+- **Tools for analysis**, including sentiment detection, engagement trends, and visualization.
+
+---
+
+## 📝 Datasets
+The project includes datasets collected with various methods:
+1. **All posts**: A comprehensive dataset containing a mix of popular and less popular posts.
+2. **Popular posts**: Focused on posts with high engagement (e.g., high scores or comments).
+3. **Custom datasets**: Created based on specific criteria (e.g., by subreddit, time period, or content type).
+
+Each dataset includes the following columns:
 
 | Column Name     | Description                                      |  
 |------------------|--------------------------------------------------|  
@@ -30,17 +37,8 @@ The dataset contains **5248 rows** and the following columns:
 
 ---
 
-## 📌 Example Row
-Here is an example row from the dataset:
-
-| Text                     | Score  | Comments | Timestamp           | URL                  | Sentiment | Day_of_Week | Time_of_Day | Media_Type |  
-|--------------------------|--------|----------|---------------------|----------------------|-----------|-------------|-------------|------------|  
-| Joe Biden elected...     | 365127 | 28319    | 2020-11-07 16:28:37 | https://example.com  | Neutral   | Saturday    | Afternoon   | Text       |
-
----
-
 ## 📈 Applications
-This dataset can be used for:
+This project can be used for:
 1. **Machine Learning**:
    - Predict `Score` or `Comments` using features like `Text`, `Sentiment`, and `Time_of_Day`.
    - Classify posts based on sentiment or content type (`Media_Type`).
@@ -51,35 +49,36 @@ This dataset can be used for:
    - Perform sentiment analysis.
    - Analyze trends in text data from Reddit.
 
-
-## ⚙️ Tools & Technologies
-- **Python**:
-  - Libraries used: `praw`, `csv`, `datetime`, `textblob`, `emoji`, `hashlib`.
-- **Reddit API (PRAW)**:
-  - Used to fetch posts and metadata.
-- **Natural Language Processing**:
-  - `TextBlob` for sentiment analysis.
-  - `emoji` for detecting emojis in the text.
-
 ---
 
 ## 🏗️ Project Structure
 ```
-project/
+NLP_Social_Network_Project/
 │
-├── reddit_posts_all_time.csv   # Dataset file
-├── data_extract.py             # Script for collecting Reddit data
-├── README.md                   # Project documentation (this file)
-├── requirements.txt            # Python dependencies
-└── notebooks/
-    └── analysis.ipynb          # Example Jupyter notebook for dataset analysis
+├── datasets/
+│   ├── reddit_posts_all_time.csv       # Dataset with all posts
+│   ├── reddit_posts_popular.csv        # Dataset with popular posts
+│   └── reddit_posts_other.csv          # Additional datasets
+│
+├── new_func/
+│   ├── add_retweets.py                 # Script to process retweet data
+│   └── all_posts_famous_and_new.py     # Script to combine different data sources
+│
+├── notebooks/
+│   └── analysis.ipynb                  # Jupyter or other notebook for data analysis
+│
+├── .env                                # Environment variables
+├── data_extract.py                     # Main data extraction script
+├── README.md                           # Project documentation
+├── requirements.txt                    # Python dependencies
+└── project.pdf                         # Project report
 ```
 
 ---
 
-## 🔧 How to Run the Project
+## ⚙️ How to Use
 
-1. Clone this repository:
+1. Clone the repository:
 
    ```bash
    git clone https://github.com/Ramazanm1nd3R/NLP_Social_Network_Project.git
@@ -92,29 +91,36 @@ project/
    pip install -r requirements.txt
    ```
 
-3. Run the data extraction script (optional):
+3. Configure the `.env` file with your Reddit API credentials:
+   ```plaintext
+   REDDIT_CLIENT_ID=your_client_id
+   REDDIT_CLIENT_SECRET=your_client_secret
+   REDDIT_USER_AGENT=your_user_agent
+   ```
 
+4. Collect data using the `data_extract.py` script:
    ```bash
    python data_extract.py
    ```
 
-4. Explore the dataset using the provided Jupyter notebook (`analysis.ipynb`).
+5. Explore the datasets using the provided Jupyter notebooks.
 
 ---
 
 ## 🎨 Example Analysis
-Here are some ideas for analysis using this dataset:
-- **Visualize the distribution of `Score` across different `Time_of_Day`.**
-- **Analyze the most common sentiments across `Media_Type`.**
-- **Study the effect of `Day_of_Week` on the number of `Comments`.**
+Here are some ideas for analysis using the datasets:
+- **Predict post engagement**: Use machine learning to predict `Score` or `Comments`.
+- **Time-based trends**: Explore how engagement varies by `Day_of_Week` and `Time_of_Day`.
+- **Sentiment analysis**: Study the relationship between `Sentiment` and post popularity.
+- **Content type impact**: Investigate how `Media_Type` influences engagement.
 
 ---
 
 ## 📄 License
-This project is licensed under the **Creative Commons Attribution 4.0 (CC BY 4.0)** license. You are free to use, share, and adapt the dataset with proper attribution.
+This project is licensed under the **Creative Commons Attribution 4.0 (CC BY 4.0)** license. You are free to use, share, and adapt the datasets and code with proper attribution.
 
 ---
 
 ## 🙌 Acknowledgements
-- **Reddit API (PRAW)**: For providing an easy way to access Reddit data.
-- The Kaggle community for inspiring this project.
+- **Reddit API (PRAW)**: For providing easy access to Reddit data.
+- The Kaggle and GitHub communities for inspiring this project.
