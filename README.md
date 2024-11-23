@@ -51,17 +51,6 @@ This dataset can be used for:
    - Perform sentiment analysis.
    - Analyze trends in text data from Reddit.
 
----
-
-## 📚 How the Data Was Collected
-The data was collected using the official Reddit API (`PRAW`) and includes only public posts. Posts were filtered by subreddits:
-- `news`
-- `worldnews`
-- `technology`
-
-All collected data complies with Reddit's API usage policies.
-
----
 
 ## ⚙️ Tools & Technologies
 - **Python**:
